@@ -1,0 +1,55 @@
+.border-radius (@value) {
+  -webkit-border-radius: @value;
+  -moz-border-radius: @value;
+  border-radius: @value;
+}
+
+#addsymbolform {
+  text-align:center;
+}
+#addsymboltext {
+  height: 300px;
+  width: 300px;
+  rows: 50;
+}
+
+
+body {
+  margin-top: 50px;
+}
+
+.lineContainer {
+  height: 30px;
+
+
+  hidden:true;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  
+  .border-radius(4px);
+
+  display:-webkit-flex;
+  -webkit-justify-content:center;
+
+  display:flex;
+  justify-content:center;
+}
+
+.line {
+  text-align:center;
+  width: 80%;
+}
+
+.lineNumber  {
+  text-align:left;
+  width: 10%;
+}
+
+.lineCertainty  {
+  text-align:right;
+  width: 10%;
+}
+
+.green {
+  background: green;
+}
