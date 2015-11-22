@@ -15,9 +15,6 @@ $ ->
     # send the message to watch the stock
     ws.send(JSON.stringify({full_text: $("#addsymboltext").val()}))
 
-firstUpdate = true
-previewArea = null
-updateButton = null
 mathJax = null
 
 loadMathJax = ->
@@ -66,11 +63,10 @@ addSubLine = (line, certainty) ->
   lineCertainty = $("<p>").text(certainty).addClass("lineCertainty")
   lineContainer.append(scannedLine).append(lineCertainty)
   $("#stocks").append(lineContainer)
-  console.log("HI")
-  mathJax.Hub.Queue(['Typeset', mathJax.Hub, scannedLine.get()])
+  if mathJax
+    mathJax.Hub.Queue(['Typeset', mathJax.Hub, scannedLine.get()])
 
 handleExpand = (container) ->
-  console.log(container.attr('certainty'))
   if container.hasClass("specialLine") and container.attr("certainty") != '1'
     container.removeClass("specialLine")
     ln = container.attr("lineNum")
