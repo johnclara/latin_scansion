@@ -1,10 +1,16 @@
 package scansion
 
 object SCAN {
+    def clean(s:String):String = {
+      s.replaceAll(" ","\\\\;")
+    }
 
   sealed trait Syllable {
     val length:Boolean
-    val letters:String
+    val left:String
+    val space:String
+    val vowel:String
+    val right:String
   }
 
   sealed trait Foot {
@@ -26,24 +32,43 @@ object SCAN {
     override def toString = "|\\," + feet.map(_.toString).mkString("\\, | \\,") + "\\,|"
   }
 
-  case class Long(s:String, byPos:Boolean = true) extends Syllable {
+  case class Long(l:String, s:String, v:String, r:String, 
+    byPos:Boolean = true) extends Syllable {
+
     val length:Boolean = true
-    val letters:String = s
+
+    val left:String = l
+    val space:String = s
+    val vowel:String = v
+    val right:String = r
+
     val byPosition:Boolean = byPos
 
+
     def this(s:Short){
-      this(s.letters,false)
+      this(s.left,s.space,s.vowel,s.right,false)
     }
     override def toString = {
-      "\\overline{" + letters.replaceAll(" ","\\\\;") + "}"
+      if (space.nonEmpty)
+        s"${clean(left)} \\underset{\\smile}{ ${clean(space)} } \\overline{${clean(vowel)}} ${clean(right)}"
+      else
+        s"${clean(left)} \\overline{${clean(vowel)}} ${clean(right)}"
     }
   }
 
-  case class Short(s:String) extends Syllable {
+  case class Short(l:String, s:String, v:String, r:String) extends Syllable {
     val length = false
-    val letters = s
+
+    val left:String = l
+    val space:String = s
+    val vowel:String = v
+    val right:String = r
+
     override def toString = {
-      "\\overset{\\smallsmile}{" + letters.replaceAll(" ","\\\\;") + "}"
+      if (space.nonEmpty)
+        s"${clean(left)} \\underset{\\smile}{ ${clean(space)} } \\overset{\\smallsmile}{${clean(vowel)}} ${clean(right)}"
+      else
+        s"${clean(left)} \\overset{\\smallsmile}{${clean(vowel)}} ${clean(right)}"
     }
   }
 

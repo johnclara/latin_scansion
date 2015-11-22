@@ -33,12 +33,23 @@ object ScansionParser extends common.Example[Line] with RegexParsers {
   )
 
 
+  val word = "([a-z ]*)"
+  val base = s"${word}1${word}2${word}3${word}4"
+  val shortR = ("0" + base).r
+  val longR = ("9" + base).r
+
   lazy val short: Parser[Short] = (
-    "\\(S[\\w ]*\\)".r       ^^ { str => Short(str.substring(2,str.size-1)) }
+    shortR  ^^ { str => str match {
+      case shortR(l,s,v,r) => Short(l,s,v,r) 
+      }
+    }
   )
 
   lazy val long: Parser[Long] = (
-    "\\(L[\\w ]*\\)".r       ^^ { str => Long(str.substring(2,str.size-1)) }
+    longR  ^^ { str => str match {
+      case longR(l,s,v,r) => Long(l,s,v,r) 
+      }
+    }
   )
 
   def parser = line
