@@ -24,12 +24,12 @@ class ScansionLexer extends RegexParsers {
   val vowel = "[aeiouy]"
   val mute = "[bcdfgpt]"
   val liquid = "[lr]"
-  val digraph = "(ch|ph|th|qu)"
-  val singleConsonant = "(" + digraph + "|[^aeiouyhx\\W_0-9])"
-  val diphthong = "(oi|ae|oe|au|ei|cui|hui)"
-  val spaces = "( *)"
-  val doubleConsonant = "((" + singleConsonant + spaces + "(" + singleConsonant + "|x))|x)"
-  val consonants = "((" + singleConsonant + "|[xh])*)"
+  val digraph = "(?:ch|ph|th|qu)"
+  val singleConsonant = "(?:" + digraph + "|[^aeiouyhx\\W_0-9])"
+  val diphthong = "(?:oi|ae|oe|au|ei|cui|hui)"
+  val spaces = "(?: *)"
+  val doubleConsonant = "(?:(?:" + singleConsonant + spaces + "(?:" + singleConsonant + "|x))|x)"
+  val consonants = "(?:(?:" + singleConsonant + "|[xh])*)"
 
 
   def line:Parser[lin] = (
@@ -39,10 +39,10 @@ class ScansionLexer extends RegexParsers {
 
 
   def syllable: Parser[syll] = (
-    ("(" + consonants + "(" + vowel + "|" + diphthong + ")" + "(m? +h?)|" + consonants + ")" + vowel + spaces + "((" + mute + liquid + ")|" + digraph + ")").r     ^^ { str => syll("(S" + str + ")") }
-  | ("(" + consonants + "(" + vowel + "|" + diphthong + ")" + "(m? +h?)|" + consonants + ")" + vowel + spaces + doubleConsonant + spaces + consonants).r           ^^ { str => syll("(L" + str + ")") }
-  | ("(" + consonants + "(" + vowel + "|" + diphthong + ")" + "(m? +h?)|" + consonants + ")" + diphthong + spaces + consonants).r                                  ^^ { str => syll("(L" + str + ")") }
-  | ("(" + consonants + "(" + vowel + "|" + diphthong + ")" + "(m? +h?)|" + consonants + ")" + vowel + spaces + singleConsonant+"?").r                             ^^ { str => syll("(S" + str + ")") }
+    ("(?:" + consonants + "(?:" + vowel + "|" + diphthong + ")" + "(?:m? +h?)|" + consonants + ")" + vowel + spaces + "(?:(?:" + mute + liquid + ")|" + digraph + ")" + spaces).r ^^ { str => syll("(S" + str + ")") }
+  | ("(?:" + consonants + "(?:" + vowel + "|" + diphthong + ")" + "(?:m? +h?)|" + consonants + ")" + vowel + spaces + doubleConsonant + spaces + consonants + spaces).r           ^^ { str => syll("(L" + str + ")") }
+  | ("(?:" + consonants + "(?:" + vowel + "|" + diphthong + ")" + "(?:m? +h?)|" + consonants + ")" + diphthong + spaces + consonants + spaces).r                                  ^^ { str => syll("(L" + str + ")") }
+  | ("(?:" + consonants + "(?:" + vowel + "|" + diphthong + ")" + "(?:m? +h?)|" + consonants + ")" + vowel + spaces + singleConsonant+"?" + spaces).r                             ^^ { str => syll("(S" + str + ")") }
   )
 }
 

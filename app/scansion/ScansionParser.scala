@@ -51,6 +51,8 @@ object ScansionParser extends common.Example[Line] with RegexParsers {
   
   def parseLine(l:String):List[String] = {
     val clean = l.toLowerCase.replaceAll("[^A-Za-z ]","")
+      .replaceAll(" +"," ")
+      .replaceAll(" *$","")
       .replaceAll(" ia|^ia"," ja")
       .replaceAll(" iu|^iu"," ju")
       .replaceAll(" io|^io"," jo")

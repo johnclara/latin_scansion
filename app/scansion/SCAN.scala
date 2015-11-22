@@ -5,18 +5,11 @@ object SCAN {
   sealed trait Syllable {
     val length:Boolean
     val letters:String
-    override def toString = {
-      if (length) {
-        letters.toUpperCase
-      } else {
-        letters.toLowerCase
-      }
-    }
   }
 
   sealed trait Foot {
     val syllables:List[Syllable]
-    override def toString = "(" + syllables.map(_.toString).mkString(")(") + ")"
+    override def toString = syllables.map(_.toString).mkString("")
   }
 
   sealed trait FullFoot extends Foot {
@@ -30,7 +23,7 @@ object SCAN {
   sealed trait Line {
     val feet:List[Foot]
 
-    override def toString = "|" + feet.map(_.toString).mkString(" | ") + "|"
+    override def toString = "|\\," + feet.map(_.toString).mkString("\\, | \\,") + "\\,|"
   }
 
   case class Long(s:String, byPos:Boolean = true) extends Syllable {
@@ -42,17 +35,16 @@ object SCAN {
       this(s.letters,false)
     }
     override def toString = {
-      if (byPosition) {
-        super.toString
-      } else {
-        "~" + super.toString
-      }
+      "\\overline{" + letters.replaceAll(" ","\\\\;") + "}"
     }
   }
 
   case class Short(s:String) extends Syllable {
     val length = false
     val letters = s
+    override def toString = {
+      "\\overset{\\smallsmile}{" + letters.replaceAll(" ","\\\\;") + "}"
+    }
   }
 
   case class Dactyl(l:Long,s1:Short,s2:Short) extends FullFoot{
