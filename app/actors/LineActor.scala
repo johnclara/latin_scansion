@@ -23,13 +23,11 @@ class LineActor extends Actor {
     case WatchLine(x) =>
 
       val parsed= x.split("\n").map(x => ScansionParser.parseLine(x).asJava)
-      val blah = Json.toJson(parsed)
 
-      sender ! AddLines( blah )
+      sender ! AddLines( Json.toJson(parsed) )
       watchers = watchers + sender
     case UnWatchLine(_) =>
       watchers = watchers - sender
-      println("HEYO")
   }
 }
 
