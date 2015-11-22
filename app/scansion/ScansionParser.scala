@@ -4,7 +4,7 @@ import com.codecommit.gll._
 import SCAN._
 
 
-object ScansionParser extends common.Example[Line] with RegexParsers {
+object ScansionParser extends RegexParsers {
   lazy val line: Parser[Line] = (
     foot ~ foot ~ foot ~ foot ~ dactyl ~ halfFoot ^^ { (e1,e2,e3,e4,e5,e6) => DactylicHexameter(e1,e2,e3,e4,e5,e6) }
   | "^$".r                                        ^^ { (e1)                => EmptyLine() }

@@ -18,11 +18,9 @@ public class UserActor extends UntypedActor {
         this.out = out;
         
         // watch the default stocks
-        List<String> defaultLines = Play.application().configuration().getStringList("default.stocks");
+        String defaultLine = Play.application().configuration().getString("default.line");
 
-        for (String line : defaultLines) {
-            LineActor.lineActor().tell(new WatchLine(line), getSelf());
-        }
+        LineActor.lineActor().tell(new WatchLine(defaultLine), getSelf());
     }
     
     public void onReceive(Object message) {
